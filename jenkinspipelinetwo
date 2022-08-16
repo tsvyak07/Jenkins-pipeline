@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    tools {
+        maven "m3"
+    }
+    stages {
+        stage('git') {
+            steps {
+                git 'https://github.com/tsvyak07/boxfuse-tsvyak07.git'
+
+            }
+
+        }
+        stage ('build'){
+            steps {
+                sh 'mvn package'
+            }
+        }
+
+        stage ('deploy'){
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'ecada75f-fc9c-4e11-af6e-9cb1609fb79f', path: '', url: 'http://3.74.45.86:8080/')], contextPath: 'pipwebapp', war: '**/*.war'
+            }
+        }
+    }
+}
+
